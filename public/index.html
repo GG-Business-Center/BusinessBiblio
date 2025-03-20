@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business-Biblio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .header {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            text-align: center;
+        }
+        .login-box {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-box:active {
+            background-color: gold;
+        }
+        .footer {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            width: 90%;
+            margin: auto;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .footer:active {
+            background-color: gold;
+        }
+        .footer a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">Business-Biblio</div>
+    <div class="login-box" onclick="window.location.href='connexion.html'">
+        Se connecter
+    </div>
+    <div class="footer" id="inscription-link">
+        <a href="#">
+            Veux-tu apprendre le monde du Business et devenir millionnaire en un clin d'œil ? Alors inscris-toi et aie accès à tous les secrets. Invite ton entourage et gagne 50% de leur inscription.
+        </a>
+    </div>
+
+    <script>
+        // Fonction pour obtenir le paramètre "parrain" de l'URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Récupérer la valeur du paramètre "parrain"
+        const parrain = getQueryParam('parrain');
+
+        if (parrain) {
+            // Si le paramètre "parrain" est présent, générer dynamiquement le lien
+            document.getElementById('inscription-link').querySelector('a').href = `inscription.html?parrain=${parrain}`;
+        }
+    </script>
+</body>
+</html>

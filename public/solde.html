@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>solde</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: gold;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .menu {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            padding: 10px;
+        }
+        .menu a {
+            text-decoration: none;
+            padding: 10px;
+            color: black;
+            display: block;
+        }
+        .solde-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            width: 300px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .withdraw-btn {
+            display: block;
+            width: 100%;
+            background: gold;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .withdraw-btn:hover {
+            background: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
+    <div class="menu" id="menu">
+        <a href="parrainage.html">Parrainer</a>
+        <a href="solde.html">Solde</a>
+        <a href="acceuil.html">Acceuil</a>
+    </div>
+    <div class="solde-container">
+        Solde: <span id="solde">0</span> FCFA
+    </div>
+    <div class="container">
+        <h2>Retrait de fonds</h2>
+        <input type="text" id="amount" class="input-box" placeholder="Montant à retirer">
+        <input type="text" id="phone" class="input-box" placeholder="Numéro de téléphone">
+        <button class="withdraw-btn" onclick="sendWithdrawalRequest()">Confirmer le retrait</button>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function fetchSolde() {
+            const client = JSON.parse(localStorage.getItem('client'));
+            if (client && client.solde !== undefined) {
+                document.getElementById('solde').innerText = client.solde;
+            }
+        }
+
+        async function sendWithdrawalRequest() {
+            const amount = document.getElementById('amount').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!amount || !phone) {
+                alert('Veuillez remplir tous les champs.');
+                return;
+            }
+            
+            const requestData = {
+                montant: amount,
+                telephone: phone
+            };
+
+            try {
+                const response = await fetch('/api/retrait', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+                
+                const data = await response.json();
+                alert(data.message);
+                fetchSolde();
+            } catch (error) {
+                console.error('Erreur lors de l\'envoi de la demande de retrait', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+            }
+        }
+
+        fetchSolde();
+    </script>
+</body>
+</html>

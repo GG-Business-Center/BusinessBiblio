@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livres de Développement personnel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .book-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 250px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-box h4 {
+            margin: 10px 0;
+        }
+        .clicked {
+            background-color: gold; /* Couleur dorée après le clic */
+            pointer-events: none; /* Désactive le clic supplémentaire */
+        }
+    </style>
+</head>
+<body>
+    <h2 style="color: white;">Livres de Développement personnel</h2>
+    <div class="container">
+        <div class="book-box" onclick="downloadBook('livres/developpement1.pdf', this)">
+            <h4>Les secrets d'un esprit Millionnaire</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement2.pdf', this)">
+            <h4>ROBERT KIYOSAKI "Père riche Père pauvre"</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement3.pdf', this)">
+            <h4>ROBERT KIYOSAKI "le Quadrant du Cashflow"</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement4.pdf', this)">
+            <h4>L'autoroute du Millionnaire</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement5.pdf', this)">
+            <h4>L'entreprise du 21e siècle "R. KIYOSAKI"</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement6.pdf', this)">
+            <h4>L'investisseur Intelligent</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement7.pdf', this)">
+            <h4>ROBERT KIYOSAKI "Faux"</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement8.pdf', this)">
+            <h4>Les 48 lois du pouvoir</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement9.pdf', this)">
+            <h4>Réfléchissez et devenez Riche</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement10.pdf', this)">
+            <h4>L'art de la guerre</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/developpement11.pdf', this)">
+            <h4>INFOPRENEUR — COMMENT AVOIR UNE MACHINE AUTOMATIQUE À FAIRE DE L’ARGENT</h4>
+        </div>
+    </div>
+
+    <script>
+        function downloadBook(fileUrl, element) {
+            fetch(fileUrl, { method: 'HEAD' }) // Vérifie si le fichier existe
+                .then(response => {
+                    if (response.ok) {
+                        const link = document.createElement("a");
+                        link.href = fileUrl;
+                        link.download = fileUrl.split('/').pop();
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Ajouter la classe "clicked" après un clic pour désactiver et changer la couleur
+                        element.classList.add("clicked");
+                    } else {
+                        alert("Erreur : le fichier est introuvable.");
+                    }
+                })
+                .catch(() => alert("Erreur lors du téléchargement."));
+        }
+    </script>
+</body>
+</html>

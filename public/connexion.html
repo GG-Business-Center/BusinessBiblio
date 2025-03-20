@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Business-Biblio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        .container h2 {
+            color: gold;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .submit-btn {
+            background-color: gold;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Se Connecter</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="email">Adresse Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="numero">Numéro de Téléphone</label>
+                <input type="tel" id="numero" name="numero" required>
+            </div>
+            <button type="submit" class="submit-btn">Connexion</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const contact = document.getElementById("numero").value;
+
+            const response = await fetch("/connexion", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, contact })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                // Stockage des informations de l'utilisateur dans localStorage
+                const client = {
+                    email: email,
+                    contact: contact,
+                    solde: data.solde,
+                    lienParrainage: data.lienParrainage
+                };
+                localStorage.setItem("client", JSON.stringify(client));
+
+                // Redirection vers la page d'accueil
+                window.location.href = "acceuil.html";
+            } else {
+                alert(data.message);
+            }
+        });
+    </script>
+</body>
+</html>

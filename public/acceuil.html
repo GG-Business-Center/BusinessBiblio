@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Business-Biblio</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centrer verticalement */
+            align-items: center; /* Centrer horizontalement */
+            height: 100vh;
+            text-align: center;
+        }
+
+        /* Menu Toggle à gauche */
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: gold;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: lightgray;
+        }
+
+        /* Solde à droite */
+        .solde-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: gold;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Conteneur principal (centré) */
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centrer verticalement dans le conteneur */
+            align-items: center; /* Centrer horizontalement dans le conteneur */
+        }
+
+        /* Styles pour les catégories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: center; /* Centrer horizontalement les catégories */
+        }
+
+        .category {
+            background: gold;
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+        }
+
+        .category:hover {
+            background: darkgoldenrod;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .referral-box-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .referral-box {
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            background-color: gold;
+            color: black;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .copy-btn:hover {
+            background-color: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Toggle à gauche -->
+    <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
+    <div class="menu" id="menu">
+        <a href="retrait.html">Retrait</a>
+        <a href="accueil.html">Accueil</a>
+    </div>
+
+    <!-- Solde à droite -->
+    <div class="solde-box" id="soldeBox">0 XOF</div>
+
+    <!-- Contenu principal (centré) -->
+    <div class="container">
+        <h2>Bienvenue sur Business-Biblio</h2>
+        <p>Accédez à votre bibliothèque de livres numériques.</p>
+
+        <!-- Catégories de livres -->
+        <div class="categories">
+            <a href="trading.html" class="category">Trading</a>
+            <a href="dropshipping.html" class="category">Dropshipping</a>
+            <a href="developpement.html" class="category">Développement Personnel</a>
+            <a href="oratoire.html" class="category">Art Oratoire</a>
+        </div>
+    </div>
+
+    <!-- Footer avec le lien de parrainage -->
+    <footer>
+        <div class="referral-box-container">
+            <div class="referral-box" id="referralBox">Parrainage-link: Chargement...</div>
+            <button class="copy-btn" onclick="copyReferralLink()">Copier</button>
+        </div>
+    </footer>
+
+    <script>
+        function loadUserData() {
+            const clientData = JSON.parse(localStorage.getItem("client"));
+            
+            if (clientData) {
+                document.getElementById("soldeBox").textContent = clientData.solde + " XOF";
+                document.getElementById("referralBox").textContent = "Parrainage-link: " + clientData.lienParrainage;
+            } else {
+                console.log("Données client introuvables");
+            }
+        }
+
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function copyReferralLink() {
+            const referralLink = document.getElementById("referralBox").textContent.replace("Parrainage-link: ", "");
+
+            if (referralLink) {
+                navigator.clipboard.writeText(referralLink)
+                    .then(() => {
+                        alert("Lien copié !");
+                    })
+                    .catch(err => {
+                        alert("Erreur lors de la copie du lien");
+                    });
+            }
+        }
+
+        window.onload = loadUserData;
+    </script>
+</body>
+</html>

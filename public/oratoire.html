@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livres de Oratoire</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .book-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 250px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-box h4 {
+            margin: 10px 0;
+        }
+        .clicked {
+            background-color: gold; /* Couleur dorée après le clic */
+            pointer-events: none; /* Désactive le clic supplémentaire */
+        }
+    </style>
+</head>
+<body>
+    <h2 style="color: white;">Livres de Oratoire</h2>
+    <div class="container">
+        <div class="book-box" onclick="downloadBook('livres/oratoire1.pdf', this)">
+            <h4>Petit manuel d'Eloquence</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire2.pdf', this)">
+            <h4>L'art de s'exprimer en toute circonstance</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire3.pdf', this)">
+            <h4>L'Art de DIRE</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire4.pdf', this)">
+            <h4>Comment Convaincre et être Persuasif avec les Mots</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire5.pdf', this)">
+            <h4>Comment parler de SOI pour Convaincre</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire6.pdf', this)">
+            <h4>5 jours pour Bien Parler en Public</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/oratoire7.pdf', this)">
+            <h4>Comment Parler en Public</h4>
+        </div>
+    </div>
+
+    <script>
+        function downloadBook(fileUrl, element) {
+            fetch(fileUrl, { method: 'HEAD' }) // Vérifie si le fichier existe
+                .then(response => {
+                    if (response.ok) {
+                        const link = document.createElement("a");
+                        link.href = fileUrl;
+                        link.download = fileUrl.split('/').pop();
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Ajouter la classe "clicked" après un clic pour désactiver et changer la couleur
+                        element.classList.add("clicked");
+                    } else {
+                        alert("Erreur : le fichier est introuvable.");
+                    }
+                })
+                .catch(() => alert("Erreur lors du téléchargement."));
+        }
+    </script>
+</body>
+</html>

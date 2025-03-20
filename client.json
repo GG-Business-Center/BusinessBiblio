@@ -1,0 +1,58 @@
+[
+  {
+    "email": "sdfgh@gmail.com",
+    "contact": "87654334",
+    "parrain": null,
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=87654334",
+    "solde": 1000
+  },
+  {
+    "email": "asdfgh@gmail.com",
+    "contact": "76767676",
+    "parrain": null,
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=76767676",
+    "solde": 3000
+  },
+  {
+    "email": "wergh@gmail.com",
+    "contact": "98989898",
+    "parrain": null,
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=98989898",
+    "solde": 1000
+  },
+  {
+    "email": "wdfb@gmail.com",
+    "contact": "56565656",
+    "parrain": "98989898",
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=56565656",
+    "solde": 48500
+  },
+  {
+    "email": "zxcvhji@gmail.com",
+    "contact": "43434343",
+    "parrain": "56565656",
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=43434343",
+    "solde": 0
+  },
+  {
+    "email": "asdt@gmail.com",
+    "contact": "76767676",
+    "parrain": "98989898",
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=76767676",
+    "solde": 1500
+  },
+  {
+    "email": "eee@gmail.com",
+    "contact": "32323232",
+    "parrain": "87654334",
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=32323232",
+    "solde": 2500
+  },
+  {
+    "email": "ema@gmail.com",
+    "contact": "11111111",
+    "parrain": "32323232",
+    "lienParrainage": "https://5c6a-197-239-112-243.ngrok-free.app/?parrain=11111111",
+    "solde": 4000
+  }
+]

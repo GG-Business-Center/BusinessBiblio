@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livres de Dropshipping</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .book-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 250px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-box h4 {
+            margin: 10px 0;
+        }
+        .clicked {
+            background-color: gold; /* Couleur dorée après le clic */
+            pointer-events: none; /* Désactive le clic supplémentaire */
+        }
+    </style>
+</head>
+<body>
+    <h2 style="color: white;">Livres de Dropshipping</h2>
+    <div class="container">
+        <div class="book-box" onclick="downloadBook('livres/dropshipping1.pdf', this)">
+            <h4>Le Dropshipping de A à Z</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/dropshipping2.pdf', this)">
+            <h4>Conseil d'Expert pour réussir en Dropshipping</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/dropshipping3.pdf', this)">
+            <h4>Vous protéger vous et votre entreprise</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/dropshipping4.pdf', this)">
+            <h4>Bien gérer ses documents récurrents</h4>
+        </div>
+    </div>
+
+    <script>
+        function downloadBook(fileUrl, element) {
+            fetch(fileUrl, { method: 'HEAD' }) // Vérifie si le fichier existe
+                .then(response => {
+                    if (response.ok) {
+                        const link = document.createElement("a");
+                        link.href = fileUrl;
+                        link.download = fileUrl.split('/').pop();
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // Ajouter la classe "clicked" après un clic pour désactiver et changer la couleur
+                        element.classList.add("clicked");
+                    } else {
+                        alert("Erreur : le fichier est introuvable.");
+                    }
+                })
+                .catch(() => alert("Erreur lors du téléchargement."));
+        }
+    </script>
+</body>
+</html>

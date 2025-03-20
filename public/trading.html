@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livres de Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .book-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 250px;
+            cursor: pointer;
+        }
+        .book-box h4 {
+            margin: 10px 0;
+        }
+        .book-box.clicked {
+            background-color: gold; /* Couleur dorée après le clic */
+        }
+    </style>
+</head>
+<body>
+    <h2 style="color: white;">Livres de Trading</h2>
+    <div class="container">
+        <div class="book-box" onclick="downloadBook('livres/trading1.pdf', this)">
+            <h4>TRADER AVEC LES CHANDELIERS JAPONAIS</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading2.pdf', this)">
+            <h4>Forex Patterns</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading3.pdf', this)">
+            <h4>La Bible du Trading</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading4.pdf', this)">
+            <h4>FOREX CHARTS AND HOW TO READ THEM</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading5.pdf', this)">
+            <h4>La Bible du commerce du trading</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading6.pdf', this)">
+            <h4>La solution de A à Z du Trading</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading7.pdf', this)">
+            <h4>LE FOREX TRADING</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading8.pdf', this)">
+            <h4>DEBUTER EN TRADING</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading9.pdf', this)">
+            <h4>Insiders Guide to Trading Investment Analysis</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading10.pdf', this)">
+            <h4>PROFIL DE TRADER – LE SCALPER</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading11.pdf', this)">
+            <h4>GUIDE DE TRADING DEBUTANT SUR LE FOREX</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading12.pdf', this)">
+            <h4>La nuit du Trading</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading13.pdf', this)">
+            <h4>L'école du forex</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading14.pdf', this)">
+            <h4>Réussir sur les marchés financiers en 2025</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading15.pdf', this)">
+            <h4>LE GRAND LIVRE DES INDICATEURS</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading16.pdf', this)">
+            <h4>L'art du Trading</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading17.pdf', this)">
+            <h4>Les 10 indicateurs les plus populaires de l’analyse technique</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading18.pdf', this)">
+            <h4>10 ORDRES STOP ESSENTIELS</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading19.pdf', this)">
+            <h4>Débuter en bourse</h4>
+        </div>
+        <div class="book-box" onclick="downloadBook('livres/trading20.pdf', this)">
+            <h4>Global Trend Analysis System</h4>
+        </div>
+    </div>
+
+    <script>
+        function downloadBook(fileUrl, bookElement) {
+            if (!bookElement.classList.contains('clicked')) {
+                // Empêche un second clic
+                bookElement.classList.add('clicked');
+
+                fetch(fileUrl, { method: 'HEAD' }) // Vérifie si le fichier existe
+                    .then(response => {
+                        if (response.ok) {
+                            const link = document.createElement("a");
+                            link.href = fileUrl;
+                            link.download = fileUrl.split('/').pop();
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        } else {
+                            alert("Erreur : le fichier est introuvable.");
+                        }
+                    })
+                    .catch(() => alert("Erreur lors du téléchargement."));
+            }
+        }
+    </script>
+</body>
+</html>

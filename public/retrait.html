@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrait</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .withdraw-btn {
+            display: block;
+            width: 100%;
+            background: gold;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .withdraw-btn:hover {
+            background: darkgoldenrod;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Retrait de fonds</h2>
+        <input type="email" id="email" class="input-box" placeholder="Votre email">
+        <input type="text" id="contact" class="input-box" placeholder="Votre contact">
+        <input type="number" id="amount" class="input-box" placeholder="Montant à retirer">
+        <button class="withdraw-btn" onclick="sendWithdrawalRequest()">Confirmer le retrait</button>
+    </div>
+
+    <script>
+        async function sendWithdrawalRequest() {
+            const email = document.getElementById('email').value;
+            const contact = document.getElementById('contact').value; // 🛠 Correction ici !
+            const montant = document.getElementById('amount').value;
+        
+            if (!email || !contact || !montant) {
+                alert("Veuillez remplir tous les champs.");
+                return;
+            }
+        
+            try {
+    const response = await fetch('/retrait', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, contact, montant })
+    });
+
+    // ✅ Vérifier si le serveur a redirigé
+    if (response.redirected) {
+        alert("Retrait approuvé, vous serez rémunéré dans les 24 heures qui suivent.");
+        
+        // ✅ Attendre 2 secondes avant la redirection
+        setTimeout(() => {
+            window.location.href = response.url; 
+        }, 2000);
+    } else {
+        const data = await response.json();
+        alert(data.message);
+    }
+} catch (error) {
+    console.error("Erreur lors du retrait", error);
+    alert("Une erreur est survenue. Veuillez réessayer.");
+}
+
+
+        }
+    </script>
+</body>
+</html>

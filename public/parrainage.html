@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parrainage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('background-image.jpg') no-repeat center center fixed;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        .link-box {
+            background: #eaeaea;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            word-break: break-word;
+        }
+        .copy-btn {
+            background: gold;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: gold;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .menu a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
+    <div class="menu" id="menu">
+        <a href="parrainage.html">Parrainer</a>
+        <a href="solde.html">Solde</a>
+        <a href="acceuil.html">Accueil</a>
+    </div>
+    
+    <div class="container">
+        <h2>Invitez vos amis et gagnez des récompenses !</h2>
+        <p>Partagez ce lien de parrainage :</p>
+        <div class="link-box" id="referralLink">Chargement...</div>
+        <button class="copy-btn" onclick="copyLink()">Copier</button>
+        <h3>Nombre d'inscriptions via votre lien :</h3>
+        <p id="signupCount">0</p>
+    </div>
+
+    <script>
+        function loadReferralData() {
+            const client = JSON.parse(localStorage.getItem('client'));
+
+            if (!client) {
+                alert("Veuillez vous connecter.");
+                window.location.href = "connexion.html";
+                return;
+            }
+
+            const referralLink = window.location.origin + "/inscription.html?parrain=" + client.contact;
+            document.getElementById('referralLink').textContent = referralLink;
+            document.getElementById('signupCount').textContent = client.inscriptions || 0;
+        }
+
+        function copyLink() {
+            const linkBox = document.getElementById("referralLink");
+            navigator.clipboard.writeText(linkBox.textContent).then(() => {
+                alert("Lien copié !");
+            }).catch(err => {
+                console.error("Erreur lors de la copie du lien :", err);
+            });
+        }
+
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        loadReferralData();
+    </script>
+</body>
+</html>
