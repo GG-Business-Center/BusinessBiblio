@@ -117,7 +117,7 @@ app.post("/callback", async (req, res) => {
             // Vérification si le client existe déjà
             const clientExists = await clientsCollection.findOne({ email });
             if (!clientExists) {
-                const lienParrainage = `https://5c6a-197-239-112-243.ngrok-free.app/?parrain=${encodeURIComponent(contact)}`;
+                const lienParrainage = `https://businessbiblio.onrender.com/?parrain=${encodeURIComponent(contact)}`;
                 const newClient = {
                     email,
                     contact,
