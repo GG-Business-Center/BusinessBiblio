@@ -43,6 +43,11 @@ async function connectDB() {
 
 connectDB();
 
+// Route pour rediriger vers inscription.html
+app.get("/inscription", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "inscription.html"));
+  });
+
 // Route pour afficher la page d'accueil
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
