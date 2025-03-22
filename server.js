@@ -31,17 +31,22 @@ app.use((req, res, next) => {
 
 async function connectDB() {
     try {
-        const client = await MongoClient.connect(MONGO_URI);
-        const db = client.db("Business");
+        const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+        await client.connect();
+        db = client.db("Business"); // Stocke la connexion dans la variable globale db
         console.log("🚀 Connexion à MongoDB réussie");
-        return db;
     } catch (error) {
         console.error("❌ Erreur de connexion à MongoDB:", error);
-        process.exit(1); // Arrête le serveur en cas d'échec
+        process.exit(1); // Arrête le serveur si la connexion échoue
     }
 }
 
-connectDB();
+// Attendre la connexion avant de lancer le serveur
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
+    });
+});
 
 // Route pour rediriger vers inscription.html
 app.get("/inscription", (req, res) => {
