@@ -15,7 +15,7 @@ const PAYDUNYA_API_KEY = process.env.PRIVATE_KEY;
 const MASTER_KEY = process.env.MASTER_KEY;
 const CALLBACK_URL = process.env.CALLBACK_URL;
 const RETURN_URL = process.env.RETURN_URL;
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 
