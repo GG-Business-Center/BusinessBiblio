@@ -21,31 +21,39 @@ app.use(express.static("public"));
 
 const MONGO_URI = process.env.MONGO_URI; // URI de connexion MongoDB Atlas
 
-let db; // La base de données MongoDB
-
-// Middleware pour journaliser les requêtes
-app.use((req, res, next) => {
-    console.log(`Requête reçue : ${req.method} ${req.url}`);
-    next();
-});
+let db; // Stockage global de la base de données
+let mongoClient; // Stockage global du client MongoDB
 
 async function connectDB() {
     try {
-        const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-        await client.connect();
-        db = client.db("Business"); // Stocke la connexion dans la variable globale db
+        mongoClient = new MongoClient(MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        await mongoClient.connect();
+        db = mongoClient.db("Business"); // Connexion à la base de données Business
         console.log("🚀 Connexion à MongoDB réussie");
+
+        return db;
     } catch (error) {
         console.error("❌ Erreur de connexion à MongoDB:", error);
-        process.exit(1); // Arrête le serveur si la connexion échoue
+        process.exit(1); // Arrêter le serveur si MongoDB ne se connecte pas
     }
 }
 
-// Attendre la connexion avant de lancer le serveur
+// Attendre la connexion MongoDB avant de démarrer le serveur
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
     });
+});
+
+// Fermer proprement MongoDB en cas d'arrêt du serveur
+process.on("SIGINT", async () => {
+    console.log("🛑 Fermeture du serveur...");
+    await mongoClient.close();
+    process.exit(0);
 });
 
 // Route pour rediriger vers inscription.html
