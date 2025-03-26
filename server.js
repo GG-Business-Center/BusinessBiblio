@@ -217,7 +217,8 @@ app.post("/retrait", async (req, res) => {
 // Middleware pour servir les fichiers statiques depuis le dossier 'livres'
 app.use("/livres", express.static(path.join(__dirname, "livres")));
 
-// Démarrer le serveur
-app.listen(PORT, () => {
-    console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
-});
+// Attendre la connexion MongoDB avant de démarrer le serveur
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
+    });
