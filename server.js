@@ -40,13 +40,6 @@ async function connectDB() {
     }
 }
 
-// Attendre la connexion MongoDB avant de démarrer le serveur
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
-    });
-});
-
 // Fermer proprement MongoDB en cas d'arrêt du serveur
 process.on("SIGINT", async () => {
     console.log("🛑 Fermeture du serveur...");
