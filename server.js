@@ -26,11 +26,9 @@ let mongoClient; // Stockage global du client MongoDB
 
 async function connectDB() {
     try {
-        mongoClient = new MongoClient(MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        mongoClient = new MongoClient(MONGO_URI);
 
+        // Connexion à MongoDB sans les anciennes options
         await mongoClient.connect();
         db = mongoClient.db("Business"); // Connexion à la base de données Business
         console.log("🚀 Connexion à MongoDB réussie");
@@ -55,6 +53,7 @@ process.on("SIGINT", async () => {
     await mongoClient.close();
     process.exit(0);
 });
+
 
 // Route pour rediriger vers inscription.html
 app.get("/inscription", (req, res) => {
