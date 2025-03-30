@@ -112,6 +112,7 @@ app.post('/checkout', async (req, res) => {
     console.error("❌ Erreur lors de la requête PayDunya:", error);
     res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
 }
+      });
 
 // Route de callback pour PayDunya
 app.post("/callback", async (req, res) => {
