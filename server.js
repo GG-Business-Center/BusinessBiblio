@@ -82,10 +82,6 @@ app.post('/checkout', async (req, res) => {
         },
         actions: {
             cancel_url: CALLBACK_URL,
-        },
-        customer: {
-            email: email,  
-            phone: contact 
         }
     };
 
