@@ -95,6 +95,7 @@ app.post('/checkout', async (req, res) => {
             }
             
         });
+        console.log(response.data); // Inspecte la réponse de PayDunya
 
         // Traitement de la réponse reçue de PayDunya
         const result = response.data;
