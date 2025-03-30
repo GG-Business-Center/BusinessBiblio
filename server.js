@@ -100,17 +100,18 @@ app.post('/checkout', async (req, res) => {
         });
 
         const result = response.data;
+    console.log("🔍 Réponse de PayDunya :", result); // Debugging
 
-        if (result.response_code === "00") {
-            res.json({ success: true, payment_url: result.response_text });
-        } else {
-            res.json({ success: false, message: result.response_text });
-        }
-    } catch (error) {
-        console.error("❌ Erreur lors de la requête PayDunya:", error);
-        res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
+    if (result.response_code === "00" && result.response.checkout_url) {
+        res.json({ success: true, payment_url: result.response.checkout_url });
+    } else {
+        res.json({ success: false, message: result.response_text || "Erreur inconnue" });
     }
-});
+
+} catch (error) {
+    console.error("❌ Erreur lors de la requête PayDunya:", error);
+    res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
+}
 
 // Route de callback pour PayDunya
 app.post("/callback", async (req, res) => {
