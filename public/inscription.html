@@ -115,7 +115,7 @@
             message.textContent = "Traitement en cours...";
     
             try {
-            const response = await fetch("https://5c6a-197-239-112-243.ngrok-free.app/checkout", {
+            const response = await fetch("https://businessbiblio.onrender.com/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, contact, parrain }) 
