@@ -97,22 +97,28 @@ app.post('/checkout', async (req, res) => {
                 "PAYDUNYA-PRIVATE-KEY": process.env.PRIVATE_KEY,
                 "PAYDUNYA-TOKEN": process.env.TOKEN
             }
+            
         });
 
+        // Traitement de la réponse reçue de PayDunya
         const result = response.data;
-    console.log("🔍 Réponse de PayDunya :", result); // Debugging
+        console.log("✅ Réponse PayDunya:", result);  // Affichage du résultat de la réponse PayDunya
 
-    if (result.response_code === "00" && result.response.checkout_url) {
-        res.json({ success: true, payment_url: result.response.checkout_url });
-    } else {
-        res.json({ success: false, message: result.response_text || "Erreur inconnue" });
+        // Si le code de réponse est "00" (transaction créée avec succès)
+        if (result.response_code === "00") {
+            // Envoie l'URL de paiement à l'utilisateur (dans result.response_text)
+            res.json({ success: true, payment_url: result.response_text });
+        } else {
+            // Si la création de la facture échoue, renvoie un message d'erreur
+            res.json({ success: false, message: result.response_text });
+        }
+    } catch (error) {
+        // En cas d'erreur de connexion à PayDunya ou autre, renvoie un message d'erreur
+        console.error("❌ Erreur lors de la requête PayDunya:", error);
+        res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
     }
+       });
 
-} catch (error) {
-    console.error("❌ Erreur lors de la requête PayDunya:", error);
-    res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
-}
-      });
 
 // Route de callback pour PayDunya
 app.post("/callback", async (req, res) => {
