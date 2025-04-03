@@ -75,6 +75,10 @@
         <p class="warning">Le prix d'inscription est de 1000 Fr CFA</p>
         <form id="inscriptionForm">
             <div class="input-group">
+                <label for="numero">Nom complet</label>
+                <input type="tel" id="nomComplet" name="nomComplet" required>
+            </div>
+            <div class="input-group">
                 <label for="email">Adresse Email</label>
                 <input type="email" id="email" name="email" required>
             </div>
@@ -98,7 +102,8 @@
     
         document.getElementById("inscriptionForm").addEventListener("submit", async function(event) {
             event.preventDefault();
-    
+            
+            const nomComplet = document.getElementById("nomComplet").value.trim();
             const email = document.getElementById("email").value;
             const contact = document.getElementById("numero").value.trim(); 
             const parrain = getParrainFromURL();
