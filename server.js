@@ -62,7 +62,8 @@ app.get("/", (req, res) => {
 app.post('/checkout', async (req, res) => {
     console.log("🚀 Envoi de la requête de paiement à PayDunya...");
 
-    const { email, contact, parrain } = req.body;
+    // Récupération des données envoyées par le client (nomComplet et contact)
+    const { nomComplet, contact } = req.body;
 
     if (!process.env.MASTER_KEY || !process.env.PRIVATE_KEY || !process.env.TOKEN) {
         console.error("❌ Erreur: MASTER_KEY, PRIVATE_KEY ou TOKEN manquant.");
@@ -70,18 +71,19 @@ app.post('/checkout', async (req, res) => {
     }
 
     const paymentData = {
-        invoice: {
-            total_amount: 200,  
-            currency: "XOF",     
-            description: "Inscription Business-Biblio",  
-            return_url: RETURN_URL,
-            cancel_url: CALLBACK_URL,
-        },
+        total_amount: 1000,  // 💰 Montant correct (1000 XOF pour l'inscription)
+        currency: "XOF",
+        description: "Inscription Business-Biblio",
+        return_url: RETURN_URL,
+        cancel_url: CALLBACK_URL,
+
         store: {
             name: "Business-Biblio",
         },
-        actions: {
-            cancel_url: CALLBACK_URL,
+
+        customer: {
+            name: nomComplet, // ✅ Variable bien définie
+            phone_number: contact // ✅ Variable bien définie
         }
     };
 
