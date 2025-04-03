@@ -71,7 +71,7 @@ app.post('/checkout', async (req, res) => {
     }
 
     const paymentData = {
-        total_amount: 1000,  // 💰 Montant correct (1000 XOF pour l'inscription)
+        total_amount: 200,  // 💰 Montant correct (1000 XOF pour l'inscription)
         currency: "XOF",
         description: "Inscription Business-Biblio",
         return_url: RETURN_URL,
