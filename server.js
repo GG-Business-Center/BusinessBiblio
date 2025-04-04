@@ -71,19 +71,22 @@ app.post('/checkout', async (req, res) => {
     }
 
     const paymentData = {
-    invoice: {  // ✅ Ajout du champ "invoice"
-        total_amount: 200,  // 💰 Montant correct (1000 XOF pour l'inscription)
-        currency: "XOF",
-        description: "Inscription Business-Biblio",
-        return_url: RETURN_URL,
-        cancel_url: CALLBACK_URL,
+    invoice: {  
+        total_amount: 200,  
+        currency: "XOF",     
+        description: "Inscription Business-Biblio",  
     },
     store: {
         name: "Business-Biblio",
     },
+    actions: {
+        return_url: RETURN_URL,  // ✅ Redirection après paiement
+        cancel_url: CALLBACK_URL,  // ✅ Redirection en cas d'annulation
+        callback_url: CALLBACK_URL // ✅ (Si nécessaire pour PayDunya)
+    },
     customer: {
-        name: nomComplet, // ✅ Nom de l'utilisateur
-        phone_number: contact // ✅ Contact de l'utilisateur
+        name: nomComplet,
+        phone_number: contact
     }
 };
 
