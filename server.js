@@ -71,21 +71,21 @@ app.post('/checkout', async (req, res) => {
     }
 
     const paymentData = {
+    invoice: {  // ✅ Ajout du champ "invoice"
         total_amount: 200,  // 💰 Montant correct (1000 XOF pour l'inscription)
         currency: "XOF",
         description: "Inscription Business-Biblio",
         return_url: RETURN_URL,
         cancel_url: CALLBACK_URL,
-
-        store: {
-            name: "Business-Biblio",
-        },
-
-        customer: {
-            name: nomComplet, // ✅ Variable bien définie
-            phone_number: contact // ✅ Variable bien définie
-        }
-    };
+    },
+    store: {
+        name: "Business-Biblio",
+    },
+    customer: {
+        name: nomComplet, // ✅ Nom de l'utilisateur
+        phone_number: contact // ✅ Contact de l'utilisateur
+    }
+};
 
     try {
         const response = await axios.post(PAYDUNYA_CHECKOUT_URL, paymentData, {
