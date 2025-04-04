@@ -70,6 +70,9 @@ app.post('/checkout', async (req, res) => {
         return res.status(500).json({ success: false, message: "Configuration PayDunya incorrecte" });
     }
 
+    console.log("Nom complet :", nomComplet);
+    console.log("Numéro de téléphone :", contact);
+
     const paymentData = {
     invoice: {  
         total_amount: 200,  
@@ -89,6 +92,8 @@ app.post('/checkout', async (req, res) => {
         phone_number: contact
     }
 };
+    // Vérification de l'objet paymentData avant de l'envoyer à PayDunya
+console.log("Données envoyées à PayDunya :", JSON.stringify(paymentData, null, 2));
 
     try {
         const response = await axios.post(PAYDUNYA_CHECKOUT_URL, paymentData, {
