@@ -88,9 +88,10 @@ app.post('/checkout', async (req, res) => {
         callback_url: CALLBACK_URL // ✅ (Si nécessaire pour PayDunya)
     },
     customer: {
-        name: nomComplet,
-        phone_number: contact
-    }
+    name: nomComplet,
+    phone_number: contact,
+    email: email
+}
 };
     // Vérification de l'objet paymentData avant de l'envoyer à PayDunya
 console.log("Données envoyées à PayDunya :", JSON.stringify(paymentData, null, 2));
