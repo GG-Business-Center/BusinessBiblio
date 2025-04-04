@@ -103,7 +103,7 @@
         document.getElementById("inscriptionForm").addEventListener("submit", async function(event) {
             event.preventDefault();
             
-            const nomComplet = document.getElementById("nomComplet").value.trim();
+            const nomComplet = document.getElementById("nomComplet").value;
             const email = document.getElementById("email").value;
             const contact = document.getElementById("numero").value.trim(); 
             const parrain = getParrainFromURL();
