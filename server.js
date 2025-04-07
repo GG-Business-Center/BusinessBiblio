@@ -72,6 +72,7 @@ app.post('/checkout', async (req, res) => {
 
     console.log("Nom complet :", nomComplet);
     console.log("Numéro de téléphone :", contact);
+    console.log("email :", email);
 
     const paymentData = {
     invoice: {  
