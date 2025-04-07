@@ -63,7 +63,7 @@ app.post('/checkout', async (req, res) => {
     console.log("🚀 Envoi de la requête de paiement à PayDunya...");
 
     // Récupération des données envoyées par le client (nomComplet et contact)
-    const { nomComplet, contact } = req.body;
+    const { nomComplet, contact, email } = req.body;
 
     if (!process.env.MASTER_KEY || !process.env.PRIVATE_KEY || !process.env.TOKEN) {
         console.error("❌ Erreur: MASTER_KEY, PRIVATE_KEY ou TOKEN manquant.");
