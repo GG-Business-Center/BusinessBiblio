@@ -75,24 +75,29 @@ app.post('/checkout', async (req, res) => {
     console.log("email :", email);
 
     const paymentData = {
-    invoice: {  
-        total_amount: 200,  
-        currency: "XOF",     
-        description: "Inscription Business-Biblio",  
-    },
-    store: {
-        name: "Business-Biblio",
-    },
-    actions: {
-        return_url: RETURN_URL,  // ✅ Redirection après paiement
-        cancel_url: CALLBACK_URL,  // ✅ Redirection en cas d'annulation
-        callback_url: CALLBACK_URL // ✅ (Si nécessaire pour PayDunya)
-    },
-    customer: {
+  invoice: {
+    total_amount: 1000,
+    currency: "XOF",
+    description: "Inscription Business-Biblio"
+  },
+  store: {
+    name: "Business-Biblio"
+  },
+  actions: {
+    return_url: RETURN_URL,
+    cancel_url: CALLBACK_URL,
+    callback_url: CALLBACK_URL
+  },
+  customer: {
     name: nomComplet,
     phone_number: contact,
     email: email
-}
+  },
+  metadata: {
+    email,
+    contact,
+    parrain: req.body.parrain || null
+  }
 };
     // Vérification de l'objet paymentData avant de l'envoyer à PayDunya
 console.log("Données envoyées à PayDunya :", JSON.stringify(paymentData, null, 2));
