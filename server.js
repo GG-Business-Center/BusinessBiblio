@@ -76,7 +76,7 @@ app.post('/checkout', async (req, res) => {
 
     const paymentData = {
   invoice: {
-    total_amount: 1000,
+    total_amount: 200,
     currency: "XOF",
     description: "Inscription Business-Biblio"
   },
