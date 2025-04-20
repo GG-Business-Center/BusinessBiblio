@@ -155,7 +155,8 @@ app.post("/callback", async (req, res) => {
                     contact,
                     parrain: parrain || null,
                     lienParrainage,
-                    solde: 0
+                    solde: 0,
+                    statut: "actif"  // ✅ Ajout du statut "actif"
                 };
 
                 await clientsCollection.insertOne(newClient);
@@ -193,7 +194,8 @@ app.post("/connexion", async (req, res) => {
         res.json({
             success: true,
             solde: client.solde || 0,
-            lienParrainage: client.lienParrainage || ""
+            lienParrainage: client.lienParrainage || "",
+            statut: client.statut || "inconnu" // ✅ Ajout du statut
         });
     } else {
         res.json({ success: false, message: "Identifiants incorrects." });
