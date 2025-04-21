@@ -164,29 +164,38 @@ app.post("/callback", async (req, res) => {
 });
 
 app.post("/connexion", async (req, res) => {
-  const { email, contact } = req.body;
+    const { email, contact } = req.body;
 
-  try {
-    const clientsCollection = db.collection("clients");
+    try {
+        const clientsCollection = db.collection("clients");
+        const client = await clientsCollection.findOne({ email, contact });
 
-    const client = await clientsCollection.findOne({ email, contact });
+        if (!client) {
+            return res.status(404).json({ success: false, message: "Aucun client trouvé avec ces informations." });
+        }
 
-    if (!client) {
-      return res.status(404).send("Aucun client trouvé avec ces informations.");
+        if (client.statut !== "actif") {
+            return res.status(403).json({ success: false, message: "Votre inscription n'est pas encore validée." });
+        }
+
+        // ✅ Réponse JSON avec les infos du client
+        res.json({
+            success: true,
+            solde: client.solde,
+            lienParrainage: client.lienParrainage,
+            client: {
+                email: client.email,
+                contact: client.contact,
+                statutClient: client.statut
+            }
+        });
+
+    } catch (error) {
+        console.error("Erreur lors de la tentative de connexion:", error);
+        res.status(500).json({ success: false, message: "Erreur serveur. Veuillez réessayer plus tard." });
     }
-
-    if (client.statut !== "actif") {
-      return res.status(403).send("Votre inscription n'est pas encore validée.");
-    }
-
-    // ✅ Connexion réussie
-    res.sendFile(path.join(__dirname, "public", "acceuil.html"));
-
-  } catch (error) {
-    console.error("Erreur lors de la tentative de connexion:", error);
-    res.status(500).send("Erreur serveur. Veuillez réessayer plus tard.");
-  }
 });
+
 
 app.post("/retrait", async (req, res) => {
     const { email, contact, montant } = req.body;
