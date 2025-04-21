@@ -180,7 +180,7 @@ app.post("/connexion", async (req, res) => {
     }
 
     // ✅ Connexion réussie
-    res.sendFile(path.join(__dirname, "public", "accueil.html"));
+    res.sendFile(path.join(__dirname, "public", "acceuil.html"));
 
   } catch (error) {
     console.error("Erreur lors de la tentative de connexion:", error);
