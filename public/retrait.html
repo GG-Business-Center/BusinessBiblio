@@ -123,17 +123,17 @@
         body: JSON.stringify({ email, contact, montant })
     });
 
-    // ✅ Vérifier si le serveur a redirigé
-    if (response.redirected) {
+    // ✅ Vérifier si le retrait a réussi
+    if (response.ok) {
         alert("Retrait approuvé, vous serez rémunéré dans les 24 heures qui suivent.");
-        
-        // ✅ Attendre 2 secondes avant la redirection
+
+        // ✅ Attendre 2 secondes puis rediriger vers connexion.html
         setTimeout(() => {
-            window.location.href = response.url; 
+            window.location.href = "/connexion.html";
         }, 2000);
     } else {
         const data = await response.json();
-        alert(data.message);
+        alert(data.message || "Une erreur est survenue.");
     }
 } catch (error) {
     console.error("Erreur lors du retrait", error);
