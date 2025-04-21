@@ -18,6 +18,39 @@
             align-items: center;
             height: 100vh;
         }
+        .menu-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: gold;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .menu a:hover {
+            background: lightgray;
+        }
+
         .container {
             background: white;
             padding: 30px;
@@ -55,6 +88,11 @@
     </style>
 </head>
 <body>
+    <div class="menu-toggle" onclick="toggleMenu()">☰ Menu</div>
+    <div class="menu" id="menu">
+        <a href="retrait.html">Retrait</a>
+        <a href="accueil.html">Acceuil</a>
+    </div>
     <div class="container">
         <h2>Retrait de fonds</h2>
         <input type="email" id="email" class="input-box" placeholder="Votre email">
@@ -64,6 +102,10 @@
     </div>
 
     <script>
+        function toggleMenu() {
+            let menu = document.getElementById("menu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
         async function sendWithdrawalRequest() {
             const email = document.getElementById('email').value;
             const contact = document.getElementById('contact').value; // 🛠 Correction ici !
