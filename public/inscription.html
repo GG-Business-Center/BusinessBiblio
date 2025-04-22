@@ -83,9 +83,23 @@
                 <input type="email" id="email" name="email" required>
             </div>
             <div class="input-group">
-    <label for="numero">Numéro de Téléphone</label>
-    <input type="tel" id="numero" name="numero" required placeholder="Numéro de transaction">
-</div>
+                <label for="pays">Pays</label>
+                <select id="pays" name="pays" onchange="updatePlaceholderAndLimit()" required>
+                  <option value="">-- Choisir un pays --</option>
+                  <option value="Burkina Faso|+226|8">Burkina Faso</option>
+                  <option value="Bénin|+229|8">Bénin</option>
+                  <option value="Sénégal|+221|8">Sénégal</option>
+                  <option value="Côte d'Ivoire|+225|10">Côte d'Ivoire</option>
+                  <option value="Togo|+228|8">Togo</option>
+                  <option value="Mali|+223|8">Mali</option>
+                  <option value="Autre|+|8">Autre</option>
+                </select>
+              </div>
+              
+              <div class="input-group">
+                <label for="numero">Numéro de Téléphone</label>
+                <input type="tel" id="numero" name="numero" placeholder="ex: +226XXXXXXXX" required>
+              </div>
 
             <button type="submit" class="submit-btn">S'inscrire</button>
         </form>
@@ -93,6 +107,28 @@
     </div>
 
     <script>
+        function updatePlaceholderAndLimit() {
+    const pays = document.getElementById('pays');
+    const numero = document.getElementById('numero');
+    
+    // Récupérer les informations du pays sélectionné
+    const selectedCountry = pays.value;
+    
+    if (selectedCountry) {
+      // Extraire les détails du pays (Nom, Indicatif, Longueur)
+      const [countryName, code, length] = selectedCountry.split("|");
+      
+      // Mise à jour du placeholder
+      numero.placeholder = `ex: ${code}${"X".repeat(length)}`;
+      
+      // Limiter le nombre de caractères dans le champ
+      numero.maxLength = length;
+    } else {
+      // Si aucun pays n'est sélectionné, réinitialiser le placeholder
+      numero.placeholder = "ex: +XXXXXXXX";
+      numero.maxLength = 8; // Par défaut, on limite à 8 chiffres
+    }
+  }
         console.log("Parrain extrait de l'URL :", getParrainFromURL());
     
         // Fonction pour récupérer le parrain depuis l'URL
