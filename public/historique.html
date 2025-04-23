@@ -49,32 +49,30 @@
       window.location.href = "connexion.html";
     }
   
-    fetch("/historique", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, contact })
+    fetch("https://businessbiblio.onrender.com/historique", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        email: localStorage.getItem("email"),
+        contact: localStorage.getItem("contact")
     })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) {
-          alert("Erreur lors de la récupération de l'historique.");
-          return;
-        }
-  
-        const filleulsTable = document.getElementById("filleulsTable").querySelector("tbody");
-        data.filleuls.forEach(f => {
-          filleulsTable.innerHTML += `<tr><td>${f.email}</td><td>${f.contact}</td></tr>`;
-        });
-  
-        const retraitsTable = document.getElementById("retraitsTable").querySelector("tbody");
-        data.retraits.forEach(r => {
-          retraitsTable.innerHTML += `<tr><td>${r.montant} XOF</td><td>${r.statut}</td></tr>`;
-        });
-      })
-      .catch(err => {
-        console.error("Erreur fetch /historique :", err);
-        alert("Impossible de récupérer les données.");
-      });
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        // afficher filleuls et retraits dans la page
+        console.log("Filleuls :", data.filleuls);
+        console.log("Retraits :", data.retraits);
+    } else {
+        alert("Impossible de récupérer les données");
+    }
+})
+.catch(err => {
+    console.error("Erreur réseau :", err);
+    alert("Erreur lors de la récupération de l'historique");
+});
   </script>  
 </body>
 </html>
