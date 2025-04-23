@@ -234,7 +234,6 @@ app.post("/retrait", async (req, res) => {
 
 app.use("/livres", express.static(path.join(__dirname, "livres")));
 
-// Route pour récupérer les historique des retraits et des filleuls
 app.post("/historique", async (req, res) => {
     const { email, contact } = req.body;
 
@@ -246,13 +245,13 @@ app.post("/historique", async (req, res) => {
         const clientsCollection = db.collection("clients");
         const retraitsCollection = db.collection("retraits");
 
-        // Liste des filleuls de ce client (le client est parrain)
+        // 🔎 Filleuls dont le contact correspond à ce client (parrain)
         const filleuls = await clientsCollection
             .find({ parrain: contact })
             .project({ email: 1, contact: 1, _id: 0 })
             .toArray();
 
-        // Liste des retraits du client
+        // 💸 Retraits effectués par ce client
         const retraits = await retraitsCollection
             .find({ email, contact })
             .project({ montant: 1, statut: 1, _id: 0 })
@@ -261,10 +260,11 @@ app.post("/historique", async (req, res) => {
         res.json({ success: true, filleuls, retraits });
 
     } catch (error) {
-        console.error("Erreur dans /historique :", error);
-        res.status(500).json({ success: false, message: "Erreur serveur" });
+        console.error("❌ Erreur lors de la récupération de l'historique:", error);
+        res.status(500).json({ success: false, message: "Erreur serveur lors de la récupération de l'historique" });
     }
 });
+
 
 
 connectDB().then(() => {
