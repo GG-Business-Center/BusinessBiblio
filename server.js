@@ -224,7 +224,7 @@ app.post("/retrait", async (req, res) => {
         { $inc: { solde: -montantRetrait } }
     );
 
-    const retrait = { email, contact, montant: montantRetrait, date: new Date().toISOString() };
+    const retrait = { email, contact, montant: montantRetrait, statut: "en attente", date: new Date().toISOString() };
     await retraitsCollection.insertOne(retrait);
 
     console.log("✅ Retrait enregistré :", { email, contact, montantRetrait });
