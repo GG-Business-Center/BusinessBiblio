@@ -234,30 +234,35 @@ app.post("/retrait", async (req, res) => {
 
 app.use("/livres", express.static(path.join(__dirname, "livres")));
 
-fetch("https://businessbiblio.onrender.com/historique", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        email: localStorage.getItem("email"),
-        contact: localStorage.getItem("contact")
-    })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.success) {
-        // afficher filleuls et retraits dans la page
-        console.log("Filleuls :", data.filleuls);
-        console.log("Retraits :", data.retraits);
-    } else {
-        alert("Impossible de récupérer les données");
+app.post("/historique", async (req, res) => {
+    const { email, contact } = req.body;
+
+    if (!email || !contact) {
+        return res.status(400).json({ success: false, message: "Email et contact requis" });
     }
-})
-.catch(err => {
-    console.error("Erreur réseau :", err);
-    alert("Erreur lors de la récupération de l'historique");
+
+    try {
+        const clientsCollection = db.collection("clients");
+        const retraitsCollection = db.collection("retraits");
+
+        const filleuls = await clientsCollection
+            .find({ parrain: contact })
+            .project({ email: 1, contact: 1, _id: 0 })
+            .toArray();
+
+        const retraits = await retraitsCollection
+            .find({ email, contact })
+            .project({ montant: 1, statut: 1, _id: 0 })
+            .toArray();
+
+        res.json({ success: true, filleuls, retraits });
+
+    } catch (error) {
+        console.error("❌ Erreur lors de la récupération de l'historique:", error);
+        res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
 });
+
 
 connectDB().then(() => {
     app.listen(PORT, () => {
