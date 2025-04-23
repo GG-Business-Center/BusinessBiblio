@@ -234,6 +234,7 @@ app.post("/retrait", async (req, res) => {
 
 app.use("/livres", express.static(path.join(__dirname, "livres")));
 
+// Route pour récupérer les historique des retraits et des filleuls
 app.post("/historique", async (req, res) => {
     const { email, contact } = req.body;
 
