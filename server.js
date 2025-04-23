@@ -234,6 +234,38 @@ app.post("/retrait", async (req, res) => {
 
 app.use("/livres", express.static(path.join(__dirname, "livres")));
 
+app.post("/historique", async (req, res) => {
+    const { email, contact } = req.body;
+
+    if (!email || !contact) {
+        return res.status(400).json({ success: false, message: "Email et contact requis" });
+    }
+
+    try {
+        const clientsCollection = db.collection("clients");
+        const retraitsCollection = db.collection("retraits");
+
+        // Liste des filleuls de ce client (le client est parrain)
+        const filleuls = await clientsCollection
+            .find({ parrain: contact })
+            .project({ email: 1, contact: 1, _id: 0 })
+            .toArray();
+
+        // Liste des retraits du client
+        const retraits = await retraitsCollection
+            .find({ email, contact })
+            .project({ montant: 1, statut: 1, _id: 0 })
+            .toArray();
+
+        res.json({ success: true, filleuls, retraits });
+
+    } catch (error) {
+        console.error("Erreur dans /historique :", error);
+        res.status(500).json({ success: false, message: "Erreur serveur" });
+    }
+});
+
+
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`🚀 Serveur en écoute sur le port ${PORT}`);
