@@ -99,7 +99,7 @@
               
               <div class="input-group">
                 <label for="numero">Numéro de Téléphone</label>
-                <input type="tel" id="numero" name="numero" placeholder="ex: +226XXXXXXXX" required>
+                <input type="tel" id="numero" name="numero" oninput="limiterSaisie()" required>
               </div>
             <button type="submit" class="submit-btn">S'inscrire</button>
         </form>
@@ -108,28 +108,52 @@
 
     <script>
 
-        function updatePlaceholderAndLimit() {
-    const pays = document.getElementById('pays');
-    const numero = document.getElementById('numero');
-    
-    // Récupérer les informations du pays sélectionné
-    const selectedCountry = pays.value;
-    
-    if (selectedCountry) {
-      // Extraire les détails du pays (Nom, Indicatif, Longueur)
-      const [countryName, code, length] = selectedCountry.split("|");
-      
-      // Mise à jour du placeholder
+        let indicatifActuel = "";
+        let longueurMax = 0;
+
+  function updatePlaceholderAndLimit() {
+    const pays = document.getElementById("pays").value;
+    const numero = document.getElementById("numero");
+
+    if (pays) {
+      const [code, length] = pays.split("|");
+      indicatifActuel = code;
+      longueurMax = parseInt(length);
+
+      // Appliquer l’indicatif et effacer les chiffres précédents
+      numero.value = code;
       numero.placeholder = `ex: ${code}${"X".repeat(length)}`;
-      
-      // Limiter le nombre de caractères dans le champ
-      numero.maxLength = length;
     } else {
-      // Si aucun pays n'est sélectionné, réinitialiser le placeholder
+      indicatifActuel = "";
+      longueurMax = 0;
+      numero.value = "";
       numero.placeholder = "ex: +XXXXXXXX";
-      numero.maxLength = 8; // Par défaut, on limite à 8 chiffres
     }
   }
+
+  function limiterSaisie() {
+    const numero = document.getElementById("numero");
+
+    // Empêche de supprimer ou modifier l’indicatif
+    if (!numero.value.startsWith(indicatifActuel)) {
+      numero.value = indicatifActuel;
+    }
+
+    // Récupère les chiffres après l’indicatif
+    let chiffres = numero.value.slice(indicatifActuel.length);
+
+    // Supprime les caractères non numériques
+    chiffres = chiffres.replace(/\D/g, "");
+
+    // Tronque si trop long
+    if (chiffres.length > longueurMax) {
+      chiffres = chiffres.slice(0, longueurMax);
+    }
+
+    // Mise à jour du champ
+    numero.value = indicatifActuel + chiffres;
+  }
+
         
         console.log("Parrain extrait de l'URL :", getParrainFromURL());
     
