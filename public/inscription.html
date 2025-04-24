@@ -172,14 +172,6 @@
             const parrain = getParrainFromURL();
             const message = document.getElementById("message");
     
-            // Vérification du numéro (8 chiffres uniquement)
-            const phoneRegex = /^\d{8}$/;
-            if (!phoneRegex.test(contact)) {
-                message.style.color = "red";
-                message.textContent = "Le numéro doit contenir exactement 8 chiffres.";
-                return;
-            }
-    
             message.textContent = "Traitement en cours...";
     
             try {
