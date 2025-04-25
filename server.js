@@ -132,11 +132,17 @@ app.post('/checkout', async (req, res) => {
 });
 
 app.post("/callback", async (req, res) => {
-    console.log("Callback reçu:", req.body);
+    console.log("📩 Callback brut reçu:", JSON.stringify(req.body, null, 2));
+
     const { status, metadata } = req.body;
 
+    console.log("🧾 Status du paiement:", status);
+    console.log("🧠 Metadata reçu:", metadata);
+
     if (status === "completed") {
-        const { email, contact, parrain } = metadata;
+        const { email, contact, parrain } = metadata || {};
+
+        console.log("✅ Extraction metadata:", { email, contact, parrain });
 
         try {
             const clientsCollection = db.collection("clients");
@@ -162,6 +168,7 @@ app.post("/callback", async (req, res) => {
         res.sendStatus(400);
     }
 });
+
 
 app.post("/connexion", async (req, res) => {
     const { email, contact } = req.body;
