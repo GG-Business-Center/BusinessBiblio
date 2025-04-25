@@ -131,7 +131,7 @@ app.post('/checkout', async (req, res) => {
     }
 });
 
-app.post("/callback", async (req, res) => {
+app.post("/CALLBACK", async (req, res) => {
     console.log("🔥 Callback PayDunya reçu !");
     console.log("🧾 Données complètes reçues :", JSON.stringify(req.body, null, 2));
 
