@@ -131,65 +131,6 @@ app.post('/checkout', async (req, res) => {
     }
 });
 
-app.post("/CALLBACK", async (req, res) => {
-    console.log("🔥 Callback PayDunya reçu !");
-    console.log("🧾 Données complètes reçues :", JSON.stringify(req.body, null, 2));
-
-    const { status, invoice } = req.body;
-
-    // Vérifier que le paiement a été effectué avec succès
-    if (status === "completed") {
-        const { email } = invoice || {};
-        
-        console.log("📧 Email:", email);
-
-        try {
-            const clientsCollection = db.collection("clients");
-
-            // Mettre à jour le statut du client à 'actif' après le paiement
-            const client = await clientsCollection.findOne({ email });
-
-            if (!client) {
-                console.log("❌ Client non trouvé !");
-                return res.sendStatus(404);
-            }
-
-            // Mise à jour du statut à 'actif'
-            await clientsCollection.updateOne(
-                { email },
-                { $set: { statut: "actif" } }
-            );
-            
-            console.log("✅ Statut du client mis à jour");
-
-            // Traitement du parrainage : vérifier si un parrain existe et lui créditer 500 XOF
-            const { parrain } = client;
-
-            if (parrain) {
-                const parrainClient = await clientsCollection.findOne({ contact: parrain });
-
-                if (parrainClient) {
-                    // Crédits de 500 XOF au parrain
-                    await clientsCollection.updateOne(
-                        { contact: parrain },
-                        { $inc: { solde: 500 } }
-                    );
-                    console.log(`✅ Solde du parrain ${parrain} mis à jour de 500 XOF`);
-                } else {
-                    console.log(`⚠️ Parrain non trouvé pour le contact ${parrain}`);
-                }
-            }
-
-            res.sendStatus(200);
-        } catch (error) {
-            console.error("❌ Erreur lors du traitement du callback:", error);
-            res.sendStatus(500);
-        }
-    } else {
-        console.warn("⚠️ Callback reçu avec un statut NON complété :", status);
-        res.sendStatus(400);
-    }
-});
 
 
 app.post("/connexion", async (req, res) => {
@@ -203,9 +144,26 @@ app.post("/connexion", async (req, res) => {
             return res.status(404).json({ success: false, message: "Aucun client trouvé avec ces informations." });
         }
 
-        if (client.statut !== "actif") {
-            return res.status(403).json({ success: false, message: "Votre inscription n'est pas encore validée." });
+        if (client.statut === "en attente") {
+    // Mise à jour du statut
+    await clientsCollection.updateOne({ email, contact }, { $set: { statut: "actif" } });
+    console.log(`🔓 Client ${email} activé.`);
+
+    // Traitement du parrainage
+    if (client.parrain) {
+        const parrainClient = await clientsCollection.findOne({ contact: client.parrain });
+        if (parrainClient) {
+            await clientsCollection.updateOne(
+                { contact: client.parrain },
+                { $inc: { solde: 500 } }
+            );
+            console.log(`💸 500 XOF ajoutés au solde du parrain ${client.parrain}`);
+        } else {
+            console.log(`⚠️ Parrain ${client.parrain} introuvable.`);
         }
+    }
+}
+
 
         // ✅ Réponse JSON avec les infos du client
         res.json({
