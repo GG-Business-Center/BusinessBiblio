@@ -135,28 +135,49 @@ app.post("/CALLBACK", async (req, res) => {
     console.log("🔥 Callback PayDunya reçu !");
     console.log("🧾 Données complètes reçues :", JSON.stringify(req.body, null, 2));
 
-    const { status, metadata } = req.body;
+    const { status, invoice } = req.body;
 
+    // Vérifier que le paiement a été effectué avec succès
     if (status === "completed") {
-        const { email, contact, parrain } = metadata || {};
+        const { email } = invoice || {};
         
         console.log("📧 Email:", email);
-        console.log("📱 Contact:", contact);
-        console.log("🤝 Parrain:", parrain);
 
         try {
             const clientsCollection = db.collection("clients");
 
+            // Mettre à jour le statut du client à 'actif' après le paiement
+            const client = await clientsCollection.findOne({ email });
+
+            if (!client) {
+                console.log("❌ Client non trouvé !");
+                return res.sendStatus(404);
+            }
+
+            // Mise à jour du statut à 'actif'
             await clientsCollection.updateOne(
                 { email },
                 { $set: { statut: "actif" } }
             );
+            
+            console.log("✅ Statut du client mis à jour");
+
+            // Traitement du parrainage : vérifier si un parrain existe et lui créditer 500 XOF
+            const { parrain } = client;
 
             if (parrain) {
-                await clientsCollection.updateOne(
-                    { contact: parrain },
-                    { $inc: { solde: 500 } }
-                );
+                const parrainClient = await clientsCollection.findOne({ contact: parrain });
+
+                if (parrainClient) {
+                    // Crédits de 500 XOF au parrain
+                    await clientsCollection.updateOne(
+                        { contact: parrain },
+                        { $inc: { solde: 500 } }
+                    );
+                    console.log(`✅ Solde du parrain ${parrain} mis à jour de 500 XOF`);
+                } else {
+                    console.log(`⚠️ Parrain non trouvé pour le contact ${parrain}`);
+                }
             }
 
             res.sendStatus(200);
@@ -169,7 +190,6 @@ app.post("/CALLBACK", async (req, res) => {
         res.sendStatus(400);
     }
 });
-
 
 
 app.post("/connexion", async (req, res) => {
