@@ -52,18 +52,14 @@ app.get("/", (req, res) => {
 });
 
 app.post('/checkout', async (req, res) => {
-    console.log("🚀 Envoi de la requête de paiement à PayDunya...");
+    console.log("🚀 Paiement DirectPay Moov Burkina en cours...");
 
     const { nomComplet, contact, email, parrain } = req.body;
 
-    if (!process.env.MASTER_KEY || !process.env.PRIVATE_KEY || !process.env.TOKEN) {
-        console.error("❌ Erreur: MASTER_KEY, PRIVATE_KEY ou TOKEN manquant.");
-        return res.status(500).json({ success: false, message: "Configuration PayDunya incorrecte" });
+    if (!PAYDUNYA_API_KEY || !MASTER_KEY || !process.env.TOKEN) {
+        console.error("❌ Erreur: Clés PayDunya manquantes.");
+        return res.status(500).json({ success: false, message: "Clés API manquantes" });
     }
-
-    console.log("Nom complet :", nomComplet);
-    console.log("Numéro de téléphone :", contact);
-    console.log("email :", email);
 
     try {
         const clientsCollection = db.collection("clients");
@@ -83,53 +79,39 @@ app.post('/checkout', async (req, res) => {
             await clientsCollection.insertOne(newClient);
         }
 
-        const paymentData = {
-            invoice: {
-                total_amount: 200,
-                currency: "XOF",
-                description: "Inscription Business-Biblio"
-            },
-            store: {
-                name: "Business-Biblio"
-            },
-            actions: {
-                return_url: RETURN_URL,
-                cancel_url: CALLBACK_URL,
-                callback_url: CALLBACK_URL
-            },
-            customer: {
-                name: nomComplet,
+        const response = await axios.post(
+            "https://app.paydunya.com/api/v1/direct-pay/request",
+            {
+                amount: 200,
                 phone_number: contact,
-                email: email
+                operator: "moov-bf", // ✅ Moov Burkina Faso
+                callback_url: CALLBACK_URL,
+                description: "Inscription Business-Biblio",
+                client_reference: email
             },
-            metadata: {
-                email,
-                contact,
-                parrain: parrain || null
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "PAYDUNYA-MASTER-KEY": MASTER_KEY,
+                    "PAYDUNYA-PRIVATE-KEY": PAYDUNYA_API_KEY,
+                    "PAYDUNYA-TOKEN": process.env.TOKEN
+                }
             }
-        };
-
-        const response = await axios.post(PAYDUNYA_CHECKOUT_URL, paymentData, {
-            headers: {
-                "Content-Type": "application/json",
-                "PAYDUNYA-MASTER-KEY": process.env.MASTER_KEY,
-                "PAYDUNYA-PRIVATE-KEY": process.env.PRIVATE_KEY,
-                "PAYDUNYA-TOKEN": process.env.TOKEN
-            }
-        });
+        );
 
         const result = response.data;
 
         if (result.response_code === "00") {
-            res.json({ success: true, payment_url: result.response_text });
+            res.json({ success: true, message: "Paiement envoyé. Confirmez-le sur votre téléphone Moov Money." });
         } else {
             res.json({ success: false, message: result.response_text });
         }
     } catch (error) {
-        console.error("❌ Erreur lors de la requête PayDunya:", error);
-        res.status(500).json({ success: false, message: "Erreur de connexion à PayDunya" });
+        console.error("❌ Erreur DirectPay:", error.response?.data || error.message);
+        res.status(500).json({ success: false, message: "Erreur lors de l'appel DirectPay" });
     }
 });
+
 
 app.post("/CALLBACK", async (req, res) => {
     console.log("🔥 Callback PayDunya reçu !");
