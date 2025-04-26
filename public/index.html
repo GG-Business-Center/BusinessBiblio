@@ -86,7 +86,7 @@
     <div class="login-box" onclick="window.location.href='connexion.html'">
         Se connecter
     </div>
-    <div class="footer" onclick="window.location.href='inscription.html'">
+   <div class="footer" id="footer-link">
         <a href="#">
             Veux-tu apprendre le monde du Business et devenir millionnaire en un clin d'œil ? Alors inscris-toi et aie accès à tous les secrets. Invite ton entourage et gagne 50% de leur inscription.
         </a>
@@ -104,7 +104,9 @@
 
         if (parrain) {
             // Si le paramètre "parrain" est présent, générer dynamiquement le lien
-            document.getElementById('inscription-link').querySelector('a').href = `inscription.html?parrain=${parrain}`;
+            document.getElementById('footer-link').onclick = function() {
+                window.location.href = `inscription.html?parrain=${parrain}`;
+            };
         }
     </script>
 </body>
