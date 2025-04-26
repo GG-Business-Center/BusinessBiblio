@@ -93,21 +93,24 @@
     </div>
 
     <script>
-        // Fonction pour obtenir le paramètre "parrain" de l'URL
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
+        window.addEventListener('DOMContentLoaded', () => {
+            // Fonction pour obtenir le paramètre "parrain" de l'URL
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-        // Récupérer la valeur du paramètre "parrain"
-        const parrain = getQueryParam('parrain');
+            const parrain = getQueryParam('parrain');
 
-        if (parrain) {
-            // Si le paramètre "parrain" est présent, générer dynamiquement le lien
-            document.getElementById('footer-link').onclick = function() {
-                window.location.href = `inscription.html?parrain=${parrain}`;
-            };
-        }
+            // Cible la div après que la page est bien chargée
+            const footerLink = document.getElementById('footer-link');
+
+            if (footerLink && parrain) {
+                footerLink.onclick = () => {
+                    window.location.href = `inscription.html?parrain=${parrain}`;
+                };
+            }
+        });
     </script>
 </body>
 </html>
