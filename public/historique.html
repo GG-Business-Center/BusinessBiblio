@@ -160,8 +160,9 @@
                 if (data.success) {
                     // Si succès, afficher les résultats
                     const filleulsHTML = data.filleuls.length
-                        ? data.filleuls.map(f => `<div class="result"><span>Email:</span> ${f.email} <span>Contact:</span> ${f.contact}</div>`).join('')
+                        ? data.filleuls.map(f => `<div class="result"><span>Nom :</span> ${f.nomComplet}</div>`).join('')
                         : '<div class="no-results">Aucun filleul trouvé</div>';
+
                     
                     const retraitsHTML = data.retraits.length
                         ? data.retraits.map(r => `<div class="result"><span>Montant:</span> ${r.montant} XOF <span>Status:</span> ${r.statut}</div>`).join('')
