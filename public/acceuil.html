@@ -148,6 +148,7 @@
         <a href="retrait.html">Retrait</a>
         <a href="accueil.html">Acceuil</a>
         <a href="historique.html">Historique</a>
+        <a href="#" id="telechargerAffiche">Télécharger Affiche</a>
     </div>
 
     <!-- Solde à droite -->
@@ -204,6 +205,14 @@
                         alert("Erreur lors de la copie du lien");
                     });
             }
+        }
+        function downloadAffiche() {
+            const link = document.createElement("a");
+            link.href = "affiche.jpg";  // Lien vers l'image dans le dossier public
+            link.download = "affiche.jpg";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         window.onload = loadUserData;
