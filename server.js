@@ -234,7 +234,7 @@ app.post("/historique", async (req, res) => {
 
         const filleuls = await clientsCollection
             .find({ parrain: contact })
-            .project({ email: 1, contact: 1, _id: 0 })
+            .project({ nomComplet: 1, _id: 0 })
             .toArray();
 
         const retraits = await retraitsCollection
