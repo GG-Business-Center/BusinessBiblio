@@ -115,9 +115,14 @@
             const montant = document.getElementById('amount').value;
         
             if (!email || !contact || !montant) {
-                alert("Veuillez remplir tous les champs.");
-                return;
-            }
+    alert("Veuillez remplir tous les champs.");
+    return;
+}
+
+if (parseInt(montant) < 1000) {
+    alert("Le montant minimum de retrait est de 1000 F CFA.");
+    return;
+}
         
             try {
     const response = await fetch('/retrait', {
