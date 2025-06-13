@@ -131,6 +131,40 @@ app.post('/checkout', async (req, res) => {
     }
 });
 
+app.post("/connexionq2w3e4r", async (req, res) => {
+    const { email, contact } = req.body;
+
+    try {
+        const clientsCollection = db.collection("clients");
+        const client = await clientsCollection.findOne({ email, contact });
+
+        if (!client) {
+            return res.status(404).json({ success: false, message: "Aucun client trouvé avec ces informations." });
+        }
+
+        if (client.statut !== "actif") {
+            return res.status(403).json({ success: false, message: "Votre compte n'est pas encore activé. Veuillez finaliser le paiement." });
+        }
+
+        // ✅ Réponse JSON avec les infos du client (statut actif uniquement)
+        res.json({
+            success: true,
+            solde: client.solde,
+            lienParrainage: client.lienParrainage,
+            client: {
+                email: client.email,
+                contact: client.contact,
+                statutClient: client.statut
+            }
+        });
+
+    } catch (error) {
+        console.error("Erreur lors de la tentative de connexion:", error);
+        res.status(500).json({ success: false, message: "Erreur serveur. Veuillez réessayer plus tard." });
+    }
+});
+
+
 
 
 app.post("/connexion", async (req, res) => {
