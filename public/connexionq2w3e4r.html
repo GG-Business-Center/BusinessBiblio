@@ -136,19 +136,20 @@
     // Mise à jour du champ
     numero.value = indicatifActuel + chiffres;
   }
-        document.getElementById("loginForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const email = document.getElementById("email").value;
-            const contact = document.getElementById("numero").value;
+    document.getElementById("loginForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+        const email = document.getElementById("email").value;
+        const contact = document.getElementById("numero").value;
 
-            const response = await fetch("/connexion", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, contact })
-            });
+        const response = await fetch("/connexion", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, contact })
+        });
 
-            const data = await response.json();
-            if (data.success) {
+        const data = await response.json();
+        if (data.success) {
+            if (data.client.statutClient === "actif") {
                 // Stockage des informations de l'utilisateur dans localStorage
                 const client = {
                     email: email,
@@ -161,9 +162,13 @@
                 // Redirection vers la page d'accueil
                 window.location.href = "acceuil.html";
             } else {
-                alert(data.message);
+                alert("Votre inscription n'a pas encore été validée.");
             }
-        });
-    </script>
+        } else {
+            alert(data.message);
+        }
+    });
+</script>
+
 </body>
 </html>
